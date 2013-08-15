@@ -1,0 +1,8 @@
+﻿@using System.Web
+@{
+    var authentication = Request.GetOwinContext().Authentication;
+
+    authentication.SignOut("App");
+    Response.Redirect("/");
+    return;
+}

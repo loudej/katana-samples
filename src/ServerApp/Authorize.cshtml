@@ -1,0 +1,48 @@
+﻿@using System
+@using System.Security.Claims
+@using System.Web
+@using System.Web.Helpers
+@{
+    var identity = User.Identity as ClaimsIdentity ?? new ClaimsIdentity(User.Identity);
+    var authentication = Request.GetOwinContext().Authentication;
+
+    if (!identity.IsAuthenticated)
+    {
+        authentication.Challenge("App");
+        return;
+    }
+
+    if (Request.HttpMethod == "POST")
+    {
+        AntiForgery.Validate();
+        if (!string.IsNullOrEmpty(Request.Form["logout"]))
+        {
+            authentication.SignOut("App");
+            authentication.Challenge("App");
+            return;
+        }
+        if (!string.IsNullOrEmpty(Request.Form["grant"]))
+        {
+            var claimsIdentity = new ClaimsIdentity(identity.Claims, "Bearer");
+            authentication.SignIn(claimsIdentity);
+            return;
+        }
+    }
+
+    Layout = "Layout.cshtml";
+}
+
+<h1>Authorize</h1>
+
+<p>Hello, <strong>@identity.Name</strong></p>
+
+<p>The application <strong>@Request.QueryString["client_id"]</strong> wants to use your data</p>
+
+<form method="POST">
+    <fieldset>
+        <legend>How do you feel about that?</legend>
+        <input type="submit" name="grant" value="Grant" class="btn btn-primary" />
+        <input type="submit" name="logout" value="Sign in as a different user" class="btn" />
+    </fieldset>
+    @AntiForgery.GetHtml()
+</form>

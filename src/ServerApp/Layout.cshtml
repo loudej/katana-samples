@@ -1,0 +1,25 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Server App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/Content/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="navbar navbar-static-top">
+            <div class="navbar-inner">
+                <a class="brand" href="/">Server App</a>
+                <ul class="nav">
+                    <li class="@(Request.Path == "/" ? "active" : "")"><a href="/">Home</a></li>
+                    <li class="@(Request.Path == "/ReadMe" ? "active" : "")"><a href="/ReadMe">Read Me</a></li>
+                    <li class="@(Request.Path == "/Account" ? "active" : "")"><a href="/Account">Account</a></li>
+                </ul>
+            </div>
+        </div>
+        @RenderBody()
+    </div>
+    <script src="/Scripts/jquery-1.9.1.min.js"></script>
+    <script src="/Scripts/bootstrap.min.js"></script>
+</body>
+</html>

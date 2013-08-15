@@ -1,0 +1,23 @@
+﻿@using System.Security.Claims
+@using System.Web
+@{
+    var authentication = Request.GetOwinContext().Authentication;
+    var identity = User.Identity as ClaimsIdentity ?? new ClaimsIdentity(User.Identity);
+
+    if (!identity.IsAuthenticated)
+    {
+        authentication.Challenge("Bearer");
+        return;
+    }
+
+    Response.ContentType = "text/xml";
+}
+
+<me>
+    <identity authenticationType="@identity.AuthenticationType" name="@identity.Name">
+    @foreach (var claim in identity.Claims)
+    {
+        <claim type="@claim.Type" value="@claim.Value" />
+    }
+    </identity>
+</me>

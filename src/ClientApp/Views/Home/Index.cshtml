@@ -1,0 +1,20 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+@section featured {
+    <section class="featured">
+        <div class="content-wrapper">
+            <hgroup class="title">
+                <h1>@ViewBag.Title.</h1>
+                <h2>@ViewBag.Message</h2>
+            </hgroup>
+            <p>
+                The client app only does one thing:
+                Get an access_token from the ServerApp to @Html.ActionLink("Show the Me api", "Me", "Show") response
+            </p>
+            <p>
+                Or, if you prefer, you can go to the <a href="http://localhost:9001/">ServerApp home page</a>.
+            </p>
+        </div>
+    </section>
+}

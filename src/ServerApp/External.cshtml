@@ -1,0 +1,25 @@
+﻿@using System
+@using System.Security.Claims
+@using System.Web
+@using System.Web.Helpers
+@{
+    var identity = User.Identity as ClaimsIdentity ?? new ClaimsIdentity(User.Identity);
+
+    var authentication = Request.GetOwinContext().Authentication;
+    
+    if (Request.HttpMethod == "POST")
+    {
+        AntiForgery.Validate();
+        authentication.Challenge(Request.Form["provider"]);
+        return;
+    }
+    
+    if (identity.IsAuthenticated)
+    {
+        Response.Redirect(Request.QueryString["ReturnUrl"]);
+        return;
+    }
+    Layout = "Layout.cshtml";
+}
+<h1>Sign In</h1>
+Your sign in failed. <a href="@Request.QueryString["ReturnUrl"]">Try again</a>

@@ -1,0 +1,50 @@
+﻿@using System
+@using System.Security.Claims
+@using System.Web
+@using System.Web.Helpers
+@{
+    var identity = User.Identity as ClaimsIdentity ?? new ClaimsIdentity(User.Identity);
+    var authentication = Request.GetOwinContext().Authentication;
+
+    if (Request.HttpMethod == "POST")
+    {
+        AntiForgery.Validate();
+        var claims = new[]
+        {
+            new Claim(ClaimsIdentity.DefaultNameClaimType,
+                      Request.Form["username"])
+        };
+        authentication.SignIn(new ClaimsIdentity(claims, "App"));
+        return;
+    }
+
+    Layout = "Layout.cshtml";
+}
+<h1>Sign in</h1>
+<div class="well">
+    <form method="POST">
+        <fieldset>
+            <div class="control-group">
+                <label for="username">Username</label>
+                <input type="text" name="username" id="username" />
+            </div>
+            <div class="control-group">
+                <label for="password">Password</label>
+                <input type="password" name="password" id="password" />
+            </div>
+            <input type="Submit" value="Sign in" class="btn" />
+        </fieldset>
+        @AntiForgery.GetHtml()
+    </form>
+
+    <form method="POST" action="/External?ReturnUrl=@Uri.EscapeDataString(Request.QueryString["ReturnUrl"])" >
+        <fieldset>
+            <legend>Use External Sign In</legend>
+            <input type="submit" name="provider" value="Microsoft" class="btn" />
+            <input type="submit" name="provider" value="Google" class="btn" />
+            <input type="submit" name="provider" value="Facebook" class="btn" />
+            <input type="submit" name="provider" value="Twitter" class="btn" />
+        </fieldset>
+        @AntiForgery.GetHtml()
+    </form>
+</div>

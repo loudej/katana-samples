@@ -1,0 +1,29 @@
+﻿@using System.Security.Claims
+@using System.Web
+@{
+    var identity = User.Identity as ClaimsIdentity ?? new ClaimsIdentity(User.Identity);
+    var authentication = Request.GetOwinContext().Authentication;
+
+    // check for anonymous identity
+    if (!identity.IsAuthenticated)
+    {
+        // Any active middleware may alter the response on the way out.
+        // Same effect as changing status code to 401, really. 
+        authentication.Challenge();
+        return;
+    }
+    Layout = "Layout.cshtml";
+}
+
+<h1>Account</h1>
+<p>Hello, @identity.Name. This is your account.</p>
+<p><a href="/logout" class="btn">Sign Out</a></p>
+
+<h2>Claims</h2>
+<p>These are the claims on the request user identity.</p>
+<ul>
+    @foreach (var claim in identity.Claims)
+    {
+        <li>@claim.Type<br />@claim.Value</li>
+    }
+</ul>

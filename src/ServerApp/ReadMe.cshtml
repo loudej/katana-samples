@@ -1,0 +1,44 @@
+﻿@using System
+@using System.Security.Claims
+@using System.Web
+@{
+    Layout = "Layout.cshtml";
+}
+<h2>Read Me</h2>
+<p>
+    OAuth, Cookies, and External sign in demonstration.
+</p>
+<p>
+    Layout.cshtml provides a generic theme for browsable html pages.
+</p>
+<p>
+    <a href="/" class="label">Default.cshtml</a> root page of the site, contains a link to the Account protected resource.
+</p>
+<p>
+    <a href="/Account" class="label">Account.cshtml</a> a browsable protected resource - anonymous access not allowed. 
+    To protect resource, return status code 401, or call Challenge. Calling Challenge also enables resource to state
+    which AuthenticationType values are acceptable.
+</p>
+<p>
+    <a href="/Me" class="label">Me.cshtml</a> an api protected resource - anonymous access not allowed. The "App" or "Bearer" auth types are 
+    expected to be used to access this uri.
+</p>
+<p>
+    <a href="/Authorize?response_type=code&client_id=readme-page" class="label">Authorize.cshtml</a> the protected resource that runs behind the auth server middleware. The Authorize 
+    page will challenge "App" if the request is anonymous, which results in redirecting to Login with the query string of 
+    ReturnUrl=/Authorize.
+</p>
+<p>
+    <a href="/Login?ReturnUrl=@Uri.EscapeDataString("/ReadMe")" class="label">Login.cshtml</a> a page that enables the visitor to POST back user name and password credentials. It also
+    enables the visitor to POST back to the External protected resource for external login mechanisms.
+</p>
+<p>
+    <a href="/External" class="label">External.cshtml</a> is a resource that will redirect to any of the external providers named by POSTing onto
+    it. When the external provider returns it arrives as a GET, the user agent is then redirected back to the initial resource that
+    did the challenge.
+</p>
+<p>
+    <a href="/Logout" class="label">Logout.cshtml</a> calls SignOut on the "App" cookie AuthenticationType, and redirects to the root of the site.
+</p>
+
+
